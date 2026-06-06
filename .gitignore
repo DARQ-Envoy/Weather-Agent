@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+.env
+
+
+
+# Mastra
+.mastra/
+src/mastra/public/
+*.duckdb
+*.db
+mastra.db

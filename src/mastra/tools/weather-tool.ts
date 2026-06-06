@@ -24,7 +24,8 @@ export const weatherTool = createTool({
   id: 'get-weather',
   description: 'Get current weather for a location',
   inputSchema: z.object({
-    location: z.string().describe('City name'),
+      location: z.string().describe('City or place name only, no country'),
+    countryCode: z.string().optional().describe('ISO 3166-1 alpha-2 country code e.g. US, GB, FR, DE'),
   }),
   outputSchema: z.object({
     temperature: z.number(),
@@ -36,19 +37,23 @@ export const weatherTool = createTool({
     location: z.string(),
   }),
   execute: async (inputData) => {
-    return await getWeather(inputData.location);
+    return await getWeather(inputData.location, inputData.countryCode);
   },
 });
 
-const getWeather = async (location: string) => {
-  const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}&count=1`;
+const getWeather = async (location: string, countryCode?: string) => {
+  let  geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}`;
+    if (countryCode) {
+    geocodingUrl += `&countryCode=${countryCode.toUpperCase()}`;
+  }
+    console.log('Geocoding URL:', geocodingUrl);
   const geocodingResponse = await fetch(geocodingUrl);
   const geocodingData = (await geocodingResponse.json()) as GeocodingResponse;
+    console.log('Geocoding data:', geocodingData);
 
   if (!geocodingData.results?.[0]) {
     throw new Error(`Location '${location}' not found`);
   }
-
   const { latitude, longitude, name } = geocodingData.results[0];
 
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_gusts_10m,weather_code`;

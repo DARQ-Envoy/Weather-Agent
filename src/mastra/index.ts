@@ -24,8 +24,12 @@ export const mastra = new Mastra({
   }),
   logger: new PinoLogger({
     name: 'Mastra',
-    level: 'info',
+    level: 'debug',
   }),
+  //   telemetry: {
+  //   serviceName: 'weather-app',
+  //   enabled: true,
+  // },
   observability: new Observability({
     configs: {
       default: {

@@ -1,1 +1,700 @@
 @import 'tailwindcss';
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: rgba(255, 255, 255, 0.96);
+  background: #050a12;
+  font-synthesis: none;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.weather-dashboard {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #050a12;
+}
+
+.weather-scene,
+.weather-gradient,
+.weather-vignette,
+.rain-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.weather-scene {
+  z-index: -5;
+  background-image: var(--weather-image);
+  background-position: center;
+  background-size: cover;
+  filter: saturate(1.08) contrast(1.06);
+  transform: scale(1.04);
+}
+
+.weather-gradient {
+  z-index: -4;
+  background: linear-gradient(180deg, rgba(5, 10, 18, 0.15), rgba(5, 10, 18, 0.75));
+}
+
+.weather-vignette {
+  z-index: -3;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.45) 78%);
+}
+
+.rain-texture {
+  z-index: -2;
+  opacity: 0.06;
+  background-image:
+    repeating-linear-gradient(108deg, rgba(255, 255, 255, 0) 0 8px, rgba(255, 255, 255, 0.9) 9px, rgba(255, 255, 255, 0) 12px),
+    repeating-linear-gradient(103deg, rgba(255, 255, 255, 0) 0 18px, rgba(255, 255, 255, 0.7) 19px, rgba(255, 255, 255, 0) 22px);
+  background-size: 120px 160px, 180px 220px;
+  animation: rain-drift 18s linear infinite;
+}
+
+@keyframes rain-drift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: -120px 320px, -180px 440px;
+  }
+}
+
+.dashboard-header {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  z-index: 20;
+  transform: translateX(-50%);
+}
+
+.dashboard-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 260px;
+  height: 60px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.nav-icon-button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.75);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.dashboard-shell {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  padding: 112px 64px 48px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) 340px;
+  gap: 48px;
+  width: min(100%, 1360px);
+  min-height: calc(100vh - 160px);
+  margin: 0 auto;
+}
+
+.weather-main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 760px;
+  min-height: 0;
+}
+
+.hero-weather {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.weather-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.weather-copy h1 {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 88px;
+  font-weight: 250;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.weather-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 38px;
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.weather-description {
+  max-width: 560px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.temperature-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.temperature-value {
+  font-size: 140px;
+  font-weight: 200;
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.temperature-degree {
+  margin-top: 8px;
+  font-size: 64px;
+  font-weight: 200;
+  line-height: 1;
+}
+
+.location-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.location-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-assistant {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 24px;
+  min-height: 280px;
+  margin-top: 48px;
+}
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.quick-chip {
+  height: 34px;
+  padding: 0 16px;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 13px;
+  line-height: 34px;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(24px);
+}
+
+.assistant-input-shell {
+  position: relative;
+  width: 100%;
+}
+
+.weather-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 56px;
+  padding: 0 16px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2);
+}
+
+.weather-input input {
+  min-width: 0;
+  flex: 1;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 16px;
+  background: transparent;
+  border: 0;
+  outline: 0;
+}
+
+.weather-input input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.weather-input button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.floating-chat {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  left: 0;
+  z-index: 30;
+  width: 100%;
+  min-height: 240px;
+  max-height: 420px;
+  padding: 24px;
+  overflow: hidden;
+  background: rgba(38, 48, 64, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  backdrop-filter: blur(36px);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.35);
+}
+
+.chat-scroll {
+  display: flex;
+  max-height: 372px;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.chat-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.empty-chat {
+  display: grid;
+  min-height: 192px;
+  place-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 13px;
+  text-align: center;
+}
+
+.chat-message {
+  width: fit-content;
+  padding: 14px;
+  border-radius: 18px;
+}
+
+.chat-message p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.chat-message.user {
+  max-width: 75%;
+  align-self: flex-end;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.chat-message.assistant {
+  max-width: 85%;
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.assistant-label,
+.insight-label,
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.assistant-label {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+}
+
+.message-confidence {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.message-confidence span,
+.confidence span {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 12px;
+}
+
+.message-confidence div,
+.confidence div {
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+.message-confidence i,
+.confidence i {
+  display: block;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+}
+
+.forecast-timeline {
+  position: relative;
+  width: 100%;
+  margin-top: 48px;
+  padding: 24px 0 0;
+}
+
+.forecast-path {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  overflow: visible;
+}
+
+.forecast-path path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.32);
+  stroke-width: 2;
+}
+
+.forecast-items {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  min-height: 120px;
+}
+
+.forecast-day {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.forecast-day span {
+  font-size: 13px;
+}
+
+.forecast-day svg {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.forecast-day strong {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.weather-sidebar {
+  display: flex;
+  width: 340px;
+  flex-direction: column;
+  gap: 16px;
+  align-self: center;
+}
+
+.glass-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  backdrop-filter: blur(32px);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.18),
+    0 30px 80px rgba(0, 0, 0, 0.25);
+}
+
+.wind-card,
+.sunrise-card,
+.insight-card {
+  padding: 24px;
+}
+
+.wind-card {
+  display: flex;
+  height: 220px;
+  flex-direction: column;
+}
+
+.card-title {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 13px;
+}
+
+.wind-metric {
+  margin-top: 24px;
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 56px;
+  font-weight: 300;
+  line-height: 0.9;
+}
+
+.wind-unit {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 13px;
+}
+
+.wind-chart {
+  width: 100%;
+  height: 76px;
+  margin-top: auto;
+}
+
+.wind-fill {
+  fill: rgba(255, 255, 255, 0.06);
+}
+
+.wind-line {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.58);
+  stroke-width: 2;
+}
+
+.sunrise-card {
+  display: flex;
+  height: 180px;
+  flex-direction: column;
+}
+
+.sun-times {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.sun-times div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sun-times span {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 13px;
+}
+
+.sun-times strong {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 24px;
+  font-weight: 300;
+  white-space: nowrap;
+}
+
+.sun-arc {
+  width: 100%;
+  height: 80px;
+  margin-top: auto;
+}
+
+.sun-arc path {
+  fill: none;
+  stroke: rgba(255, 205, 124, 0.42);
+  stroke-dasharray: 4 8;
+  stroke-width: 2;
+}
+
+.sun-arc line {
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1;
+}
+
+.sun-arc circle {
+  fill: rgba(255, 205, 124, 0.9);
+  filter: drop-shadow(0 0 16px rgba(255, 205, 124, 0.55));
+}
+
+.insight-card {
+  display: flex;
+  height: 180px;
+  flex-direction: column;
+}
+
+.insight-label {
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.insight-card p {
+  flex: 1;
+  margin: 16px 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.confidence {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 1100px) {
+  body {
+    overflow: auto;
+  }
+
+  .dashboard-shell {
+    padding: 112px 32px 48px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-main {
+    max-width: 760px;
+  }
+
+  .weather-sidebar {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-self: stretch;
+  }
+}
+
+@media (max-width: 760px) {
+  .dashboard-shell {
+    padding: 104px 24px 48px;
+  }
+
+  .dashboard-grid {
+    gap: 32px;
+  }
+
+  .weather-copy h1 {
+    font-size: 64px;
+  }
+
+  .weather-subtitle {
+    font-size: 32px;
+  }
+
+  .temperature-value {
+    font-size: 112px;
+  }
+
+  .weather-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .forecast-items {
+    overflow-x: auto;
+    grid-template-columns: repeat(7, 72px);
+    padding-bottom: 8px;
+  }
+}
+
+@media (max-width: 520px) {
+  .dashboard-shell {
+    padding: 96px 16px 32px;
+  }
+
+  .weather-copy h1 {
+    font-size: 48px;
+  }
+
+  .weather-subtitle {
+    font-size: 24px;
+  }
+
+  .temperature-value {
+    font-size: 88px;
+  }
+
+  .temperature-degree {
+    font-size: 48px;
+  }
+
+  .location-row {
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+
+  .floating-chat {
+    padding: 16px;
+  }
+}
