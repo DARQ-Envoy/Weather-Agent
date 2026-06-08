@@ -5,6 +5,7 @@ import type {
   ChatMessage,
   ForecastDay,
   ForecastDayUpdate,
+  Location,
   WeatherConditionKey,
   WeatherData,
   WeatherUpdateData,
@@ -14,6 +15,14 @@ const AI_SUBTITLE_FALLBACK = 'Use the assistant for an AI summary of this foreca
 const AI_DESCRIPTION_FALLBACK =
   'Use the assistant for AI-generated forecast details and planning guidance.'
 const AI_INSIGHT_FALLBACK = 'Use the assistant for AI insights and weather recommendations.'
+const NYC_DEFAULT_LOCATIONS: Location[] = [
+  { lat: 40.7812, lng: -73.9665, label: 'Central Park' },
+  { lat: 40.758, lng: -73.9855, label: 'Times Square' },
+  { lat: 40.7061, lng: -73.9969, label: 'DUMBO' },
+  { lat: 40.7308, lng: -73.9973, label: 'Greenwich Village' },
+  { lat: 40.6782, lng: -73.9442, label: 'Brooklyn' },
+  { lat: 40.7527, lng: -73.9772, label: 'Midtown Manhattan' },
+]
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -24,6 +33,24 @@ export function getTimestamp() {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+export function formatHeaderDate(date?: string) {
+  if (!date) return ''
+
+  const [year, month, day] = date.split('-').map(Number)
+  if (!year || !month || !day) return date
+
+  const value = new Date(Date.UTC(year, month - 1, day))
+  return value.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  })
+}
+
+export function getRandomDefaultLocation(): Location {
+  return NYC_DEFAULT_LOCATIONS[Math.floor(Math.random() * NYC_DEFAULT_LOCATIONS.length)]
 }
 
 export function resolveWeatherConditionKey(condition: string): WeatherConditionKey {

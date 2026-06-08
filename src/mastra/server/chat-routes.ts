@@ -123,6 +123,7 @@ export const weatherInitRoute = registerApiRoute("/weather/init", {
       const daily = data.daily.time.map((date: string, i: number) => {
         return {
     day: getDayName(date),
+    date: date as string,
     ...buildSnapshot(
       locationName,
       data.daily.weather_code[i],

@@ -117,7 +117,7 @@ export async function fetchInitialWeather(location: Location): Promise<WeatherIn
         lng: location.lng,
       },
     });
-    console.log(data)
+    console.log({data})
 
     return data;
   } catch {

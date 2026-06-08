@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 
 export type WeatherConditionKey = 'storm' | 'sunny' | 'rain' | 'cloudy' | 'snow' | 'fog' | 'windy'
+export type AppPage = 'home' | 'about'
 
 export interface ChatMessage {
   id: string
@@ -28,6 +29,7 @@ export interface WeatherSnapshot {
 
 export interface ForecastDay extends WeatherSnapshot {
   day: string
+  date?: string
   Icon: LucideIcon
 }
 
