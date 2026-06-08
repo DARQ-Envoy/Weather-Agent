@@ -7,6 +7,7 @@ import { MastraCompositeStore } from '@mastra/core/storage';
 import { Observability, MastraStorageExporter, MastraPlatformExporter, SensitiveDataFilter } from '@mastra/observability';
 import { weatherWorkflow } from './workflows/weather-workflow';
 import { weatherAgent } from './agents/weather-agent';
+import { clearThreadRoute, healthRoute, weatherChatRoute, weatherInitRoute } from './server/chat-routes';
 
 
 export const mastra = new Mastra({
@@ -26,10 +27,7 @@ export const mastra = new Mastra({
     name: 'Mastra',
     level: 'debug',
   }),
-  //   telemetry: {
-  //   serviceName: 'weather-app',
-  //   enabled: true,
-  // },
+
   observability: new Observability({
     configs: {
       default: {
@@ -44,4 +42,12 @@ export const mastra = new Mastra({
       },
     },
   }),
+    server: {
+    apiRoutes: [
+       weatherChatRoute,
+       clearThreadRoute,
+       healthRoute,
+       weatherInitRoute
+    ]
+    }
 });

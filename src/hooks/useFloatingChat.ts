@@ -1,12 +1,13 @@
 import { useEffect, useRef } from 'react'
 
-export function useFloatingChat(isOpen: boolean, onClose: () => void) {
+export function useFloatingChat(isOpen: boolean, scrollKey: string, onClose: () => void) {
   const containerRef = useRef<HTMLDivElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (!isOpen) return
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
-  }, [isOpen])
+  }, [isOpen, scrollKey])
 
   useEffect(() => {
     const handlePointerDown = (event: MouseEvent) => {

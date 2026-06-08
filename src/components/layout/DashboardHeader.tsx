@@ -1,4 +1,4 @@
-import { Bell, Home, Map, Search } from 'lucide-react'
+import { Bell, ChevronDown, CloudSun, Home, Map, Search } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const navItems = [
@@ -11,6 +11,11 @@ const navItems = [
 export function DashboardHeader() {
   return (
     <header className="dashboard-header">
+      <div className="brand-mark">
+        <CloudSun aria-hidden size={28} />
+        <span>forecast.now</span>
+      </div>
+{/* 
       <motion.nav
         className="dashboard-nav"
         aria-label="Weather navigation"
@@ -30,7 +35,19 @@ export function DashboardHeader() {
             <Icon aria-hidden size={20} />
           </motion.button>
         ))}
-      </motion.nav>
+      </motion.nav> */}
+
+      <div className="header-meta">
+        <span className="header-date">28 Aug | 11:52</span>
+        <button className="profile-pill" type="button" aria-label="Profile">
+          <span className="avatar" />
+          <span className="profile-copy">
+            <strong>Sam Rouw</strong>
+            <span>Admin</span>
+          </span>
+          <ChevronDown aria-hidden size={16} />
+        </button>
+      </div>
     </header>
   )
 }

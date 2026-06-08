@@ -3,15 +3,18 @@ import { motion } from 'framer-motion'
 import type { KeyboardEvent } from 'react'
 
 interface WeatherInputProps {
+  isSending: boolean
   value: string
   onChange: (value: string) => void
   onFocus: () => void
   onSubmit: () => void
 }
 
-export function WeatherInput({ value, onChange, onFocus, onSubmit }: WeatherInputProps) {
+export function WeatherInput({ isSending, value, onChange, onFocus, onSubmit }: WeatherInputProps) {
+  const isSubmitDisabled = isSending || !value.trim()
+
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !isSubmitDisabled) {
       event.preventDefault()
       onSubmit()
     }
@@ -38,7 +41,12 @@ export function WeatherInput({ value, onChange, onFocus, onSubmit }: WeatherInpu
       <button aria-label="Use microphone" type="button">
         <Mic aria-hidden size={18} />
       </button>
-      <button aria-label="Send message" onClick={onSubmit} type="button">
+      <button
+        aria-label="Send message"
+        disabled={isSubmitDisabled}
+        onClick={onSubmit}
+        type="button"
+      >
         <Send aria-hidden size={18} />
       </button>
     </motion.div>

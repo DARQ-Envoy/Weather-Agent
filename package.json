@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.68",
+    "@base-ui/react": "^1.5.0",
     "@mastra/core": "^1.41.0",
     "@mastra/duckdb": "^1.4.1",
     "@mastra/libsql": "^1.12.1",
@@ -18,11 +19,15 @@
     "@mastra/memory": "^1.20.2",
     "@mastra/observability": "^1.14.1",
     "@tailwindcss/vite": "^4.3.0",
+    "axios": "^1.17.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.17.0",
     "mastra": "^1.12.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.0",
     "zod": "^4.4.3"
   },

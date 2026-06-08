@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 import type { RefObject } from 'react'
-import type { ChatMessage } from '../../types/weather'
+import type { ChatMessage } from '../../types'
 
 interface FloatingChatProps {
   isOpen: boolean
@@ -28,14 +28,17 @@ export function FloatingChat({ isOpen, messages, messagesEndRef }: FloatingChatP
               </div>
             ) : (
               messages.map((message, index) => (
-                <article className={`chat-message ${message.role}`} key={`${message.timestamp}-${index}`}>
+                <article
+                  className={`chat-message ${message.role}${message.pending ? ' pending' : ''}`}
+                  key={message.id ?? `${message.timestamp}-${index}`}
+                >
                   {message.role === 'assistant' && (
                     <div className="assistant-label">
                       <Sparkles aria-hidden size={14} />
                       <span>AI Assistant</span>
                     </div>
                   )}
-                  <p>{message.content}</p>
+                  <p>{message.content || (message.pending ? 'Thinking...' : '')}</p>
                   {message.confidence ? (
                     <div className="message-confidence">
                       <span>Confidence: {message.confidence}%</span>

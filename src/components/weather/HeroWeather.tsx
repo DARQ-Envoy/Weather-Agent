@@ -1,6 +1,6 @@
 import { MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
-import type { WeatherData } from '../../types/weather'
+import type { WeatherData } from '../../types'
 
 interface HeroWeatherProps {
   weather: WeatherData
@@ -22,7 +22,8 @@ export function HeroWeather({ weather }: HeroWeatherProps) {
 
       <div className="temperature-row">
         <span className="temperature-value">{weather.temperature}</span>
-        <span className="temperature-degree">°</span>
+        <span className="temperature-degree">&deg;</span>
+        <span className="temperature-mark">+ / _</span>
       </div>
 
       <div className="location-row">

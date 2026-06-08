@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
 import { useFloatingChat } from '../../hooks/useFloatingChat'
-import type { ChatMessage } from '../../types/weather'
+import type { ChatMessage } from '../../types'
 import { FloatingChat } from './FloatingChat'
 import { WeatherInput } from './WeatherInput'
 
 interface WeatherAssistantProps {
   chatOpen: boolean
+  isSending: boolean
   input: string
   messages: ChatMessage[]
   onChatOpenChange: (open: boolean) => void
@@ -23,6 +24,7 @@ const quickActions = [
 
 export function WeatherAssistant({
   chatOpen,
+  isSending,
   input,
   messages,
   onChatOpenChange,
@@ -30,7 +32,11 @@ export function WeatherAssistant({
   onQuickAction,
   onSendMessage,
 }: WeatherAssistantProps) {
-  const { containerRef, messagesEndRef } = useFloatingChat(chatOpen, () => onChatOpenChange(false))
+  const lastMessage = messages[messages.length - 1]
+  const scrollKey = lastMessage ? `${messages.length}:${lastMessage.content}` : 'empty'
+  const { containerRef, messagesEndRef } = useFloatingChat(chatOpen, scrollKey, () =>
+    onChatOpenChange(false),
+  )
 
   return (
     <section className="weather-assistant" ref={containerRef}>
@@ -43,6 +49,7 @@ export function WeatherAssistant({
         {quickActions.map((action) => (
           <motion.button
             className="quick-chip"
+            disabled={isSending}
             key={action}
             onClick={() => onQuickAction(action)}
             type="button"
@@ -57,6 +64,7 @@ export function WeatherAssistant({
       <div className="assistant-input-shell">
         <FloatingChat isOpen={chatOpen} messages={messages} messagesEndRef={messagesEndRef} />
         <WeatherInput
+          isSending={isSending}
           value={input}
           onChange={onInputChange}
           onFocus={() => onChatOpenChange(true)}
