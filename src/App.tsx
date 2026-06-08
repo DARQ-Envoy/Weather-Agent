@@ -27,7 +27,7 @@ export default function App() {
   const [chatOpen, setChatOpen] = useState(false)
   const [isSending, setIsSending] = useState(false)
   const [isInitialWeatherLoading, setIsInitialWeatherLoading] = useState(true)
-  const { location } = useGeolocation()
+  const { location, loading: isLocationLoading } = useGeolocation()
   const defaultLocation = useMemo(() => getRandomDefaultLocation(), [])
   const initialWeatherKeyRef = useRef<string | null>(null)
   const activeInitialWeatherRequestRef = useRef<string | null>(null)
@@ -49,6 +49,8 @@ export default function App() {
   )
 
   useEffect(() => {
+    if (isLocationLoading) return
+
     const weatherLocation = location ?? defaultLocation
 
     const requestKey = `${weatherLocation.lat}:${weatherLocation.lng}`
@@ -79,7 +81,7 @@ export default function App() {
     return () => {
       ignore = true
     }
-  }, [defaultLocation, location])
+  }, [defaultLocation, isLocationLoading, location])
 
   useEffect(() => {
     const handleHashChange = () => {
